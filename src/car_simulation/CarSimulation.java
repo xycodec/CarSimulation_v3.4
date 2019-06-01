@@ -8,26 +8,26 @@ import java.util.Random;
 
 import utils.Logger;
 /**
- * ½øĞĞÂ·¿ö·ÂÕæ
+ * è¿›è¡Œè·¯å†µä»¿çœŸ
  * @author xycode
  *
  */
 public class CarSimulation implements Runnable{
 	
-//	public static Map<Position,CrossRoads> crossroads_mp=new HashMap<>();//×ø±êÓëÂ·¿ÚµÄÓ³Éä
-	public CrossRoad[][] crossroads;//Â·¿ÚÊı×é
-	public ArrayList<Car> other_cars;//ÆäËü³µÁ¾µÄ¼¯ºÏ
-	public Car my_car;//×Ô¼ºµÄ³µÁ¾,Ö»ÊÇÒ»¸öÒıÓÃ
-	public int start_x,start_y,end_x,end_y;//my_carµÄÆğµãÓëÖÕµã
+//	public static Map<Position,CrossRoads> crossroads_mp=new HashMap<>();//åæ ‡ä¸è·¯å£çš„æ˜ å°„
+	public CrossRoad[][] crossroads;//è·¯å£æ•°ç»„
+	public ArrayList<Car> other_cars;//å…¶å®ƒè½¦è¾†çš„é›†åˆ
+	public Car my_car;//è‡ªå·±çš„è½¦è¾†,åªæ˜¯ä¸€ä¸ªå¼•ç”¨
+	public int start_x,start_y,end_x,end_y;//my_carçš„èµ·ç‚¹ä¸ç»ˆç‚¹
 	public int timer;
 	public ArrayList<Position> car_dst;
 	
 	public static Logger logger;
-	public static final int run_time=3003;//·ÂÕæÊ±¼ä
+	public static final int run_time=3003;//ä»¿çœŸæ—¶é—´
 	public static final Direction[] next_direction= 
 		{Direction.DOWN,Direction.LEFT,Direction.RIGHT,Direction.UP};
 	public static Random r=new Random();
-	public static int[][][] crossroad_queue_size=new int[Constant.N+1][Constant.N+1][4];//´æ´¢Ë³ĞòÊÇÉÏÏÂ×óÓÒ
+	public static int[][][] crossroad_queue_size=new int[Constant.N+1][Constant.N+1][4];//å­˜å‚¨é¡ºåºæ˜¯ä¸Šä¸‹å·¦å³
 	public CarSimulation() {
 		crossroads=new CrossRoad[Constant.N+1][Constant.N+1];
 		other_cars=new ArrayList<>();
@@ -35,7 +35,7 @@ public class CarSimulation implements Runnable{
 		timer=-1;
 	}
 	
-	public static boolean rand=true;//ÊÇ·ñËæ»úÉú³ÉÆğµãÓëÖÕµãµÄ±êÖ¾,Ä¬ÈÏÉú³É
+	public static boolean rand=true;//æ˜¯å¦éšæœºç”Ÿæˆèµ·ç‚¹ä¸ç»ˆç‚¹çš„æ ‡å¿—,é»˜è®¤ç”Ÿæˆ
 	public void set_my_car(int start_x,int start_y,int end_x,int end_y) {
 		my_car.x=start_x;
 		my_car.y=start_y;
@@ -46,10 +46,10 @@ public class CarSimulation implements Runnable{
 	}
 
 	/**
-	  * Çå³ıËùÓĞ×´Ì¬
+	  * æ¸…é™¤æ‰€æœ‰çŠ¶æ€
 	 */
 	public void clear() {
-		//crossroads=newCrossRoad[Constant.N+1][Constant.N+1];//init()»áÖ±½Ó¸²¸Çµô,ËùÒÔ²»ÓÃcleanÁË
+		//crossroads=newCrossRoad[Constant.N+1][Constant.N+1];//init()ä¼šç›´æ¥è¦†ç›–æ‰,æ‰€ä»¥ä¸ç”¨cleanäº†
 		if(!other_cars.isEmpty()) other_cars.clear();
 		my_car=null;
 		timer=-1;
@@ -57,21 +57,21 @@ public class CarSimulation implements Runnable{
 	}
 	
 	public void init() {
-		//Ëæ»úÉú³Écars_numberÁ¾³µ·ÅÔÚ¼¯ºÏother_carsÀïÃæ£¬ÔÊĞí³µµÄÎ»ÖÃÖØºÏ
+		//éšæœºç”Ÿæˆcars_numberè¾†è½¦æ”¾åœ¨é›†åˆother_carsé‡Œé¢ï¼Œå…è®¸è½¦çš„ä½ç½®é‡åˆ
 		for(int i=0;i<Constant.cars_number+1;++i) {
 			Car tmp=new Car(r.nextInt(Constant.N)*Constant.cell_length,r.nextInt(Constant.N)*Constant.cell_length,i+1);
 			car_dst.add(new Position(r.nextInt(Constant.N)*Constant.cell_length,r.nextInt(Constant.N)*Constant.cell_length));
-			//Ëæ»úÉèÖÃĞĞÊ»·½Ïò
+			//éšæœºè®¾ç½®è¡Œé©¶æ–¹å‘
 			tmp.direction=next_direction[r.nextInt(4)];
 			
 			other_cars.add(tmp);
 		}
-		//×¢Òâ,ÕâÀïÆäÊµÒ²°Ñmy_carµÄ³õÊ¼×ø±êÉèÖÃºÃÁË
-		my_car=other_cars.get(Constant.cars_number);//±àºÅÎªcars_number+1µÄ¾ÍÊÇmy_car
+		//æ³¨æ„,è¿™é‡Œå…¶å®ä¹ŸæŠŠmy_carçš„åˆå§‹åæ ‡è®¾ç½®å¥½äº†
+		my_car=other_cars.get(Constant.cars_number);//ç¼–å·ä¸ºcars_number+1çš„å°±æ˜¯my_car
 		if(rand) {
 			my_car.x=r.nextInt(Constant.N)*Constant.cell_length;
 			my_car.y=r.nextInt(Constant.N)*Constant.cell_length;
-			//ÔÙÉèÖÃÒ»ÏÂÄ¿µÄµã
+			//å†è®¾ç½®ä¸€ä¸‹ç›®çš„ç‚¹
 			end_x=r.nextInt(Constant.N)*Constant.cell_length;
 			end_y=r.nextInt(Constant.N)*Constant.cell_length;
 			System.out.printf("Random generate:(%d,%d)->(%d,%d)\n",my_car.x,my_car.y,end_x,end_y);
@@ -80,33 +80,33 @@ public class CarSimulation implements Runnable{
 			System.out.printf("Appoint generate:(%d,%d)->(%d,%d)\n",my_car.x,my_car.y,end_x,end_y);
 		}
 		
-		//Ëæ»úÉú³ÉÂ·¿Ú,²¢ÉèÖÃÆä×´Ì¬£¬´æ·ÅÔÚcrossroadsÀïÃæ
-		//¼ò±ãÆğ¼û,Ã¿¸öÂ·¿Ú¶¼ÉèÖÃºìÂÌµÆ,(N-1)*(N-1)¸ö
+		//éšæœºç”Ÿæˆè·¯å£,å¹¶è®¾ç½®å…¶çŠ¶æ€ï¼Œå­˜æ”¾åœ¨crossroadsé‡Œé¢
+		//ç®€ä¾¿èµ·è§,æ¯ä¸ªè·¯å£éƒ½è®¾ç½®çº¢ç»¿ç¯,(N-1)*(N-1)ä¸ª
 		for(int i=1;i<=Constant.N-1;++i) {
 			for(int j=1;j<=Constant.N-1;++j) {
 				CrossRoad tmp=new CrossRoad(Constant.red_light_time, Constant.green_light_time,i*Constant.cell_length,j*Constant.cell_length);
-				//ÏÂÃæËæ»úÉèÖÃºìÂÌµÆµÄ³õÊ¼×´Ì¬,ÒÔ¼°ÔÊĞíÍ¨ĞĞµÄ×´Ì¬
-				if(r.nextBoolean()) {//ÉèÖÃÉÏÏÂÎªºìµÆ×´Ì¬,¼´×óÓÒ¿ÉÍ¨ĞĞ
-					tmp.redlight_time=r.nextInt(Constant.red_light_time-10)+10;//Ê±¼ä[10,Constant.red_light_time)
+				//ä¸‹é¢éšæœºè®¾ç½®çº¢ç»¿ç¯çš„åˆå§‹çŠ¶æ€,ä»¥åŠå…è®¸é€šè¡Œçš„çŠ¶æ€
+				if(r.nextBoolean()) {//è®¾ç½®ä¸Šä¸‹ä¸ºçº¢ç¯çŠ¶æ€,å³å·¦å³å¯é€šè¡Œ
+					tmp.redlight_time=r.nextInt(Constant.red_light_time-10)+10;//æ—¶é—´[10,Constant.red_light_time)
 					tmp.greenlight_time=0;
-					tmp.set_go_through(false);//ÉèÖÃ×óÓÒ¿ÉÍ¨ĞĞ
+					tmp.set_go_through(false);//è®¾ç½®å·¦å³å¯é€šè¡Œ
 				}else {
 					tmp.redlight_time=0;
 					tmp.greenlight_time=r.nextInt(Constant.red_light_time-10)+10;
 					tmp.set_go_through(true);
 				}
-				//´æ´¢µ½crossroadsÖĞ,ÈôÒª²éÑ¯,Ö±½Óx/Constant.cell_length,y/Constant.cell_length×÷ÎªË÷Òı²éÑ¯¼´¿É
+				//å­˜å‚¨åˆ°crossroadsä¸­,è‹¥è¦æŸ¥è¯¢,ç›´æ¥x/Constant.cell_length,y/Constant.cell_lengthä½œä¸ºç´¢å¼•æŸ¥è¯¢å³å¯
 				crossroads[i][j]=tmp;	
 			}
 		}
 
 	}
-	public int wait_time=0;//my_car´ÓÆğµãµ½ÖÕµãµÄ¹ı³ÌÖĞµÄµÈ´ıÊ±¼ä,²»ÄÜÊÇstaticµÄ,ÒòÎªµ±¶àÏß³ÌÊ±,»áµ¼ÖÂÖØ¸´¼Ó
+	public int wait_time=0;//my_carä»èµ·ç‚¹åˆ°ç»ˆç‚¹çš„è¿‡ç¨‹ä¸­çš„ç­‰å¾…æ—¶é—´,ä¸èƒ½æ˜¯staticçš„,å› ä¸ºå½“å¤šçº¿ç¨‹æ—¶,ä¼šå¯¼è‡´é‡å¤åŠ 
 	public static int total_time=0,success_cnt=0;
 	public static int total_wait_time=0;
 	@Override
 	public void run() {
-		rand=false;//²»Ëæ»úÉú³É
+		rand=false;//ä¸éšæœºç”Ÿæˆ
 		init();
 		start_x=my_car.x;
 		start_y=my_car.y;
@@ -115,7 +115,7 @@ public class CarSimulation implements Runnable{
 			total_time+=timer;
 			total_wait_time+=wait_time;
 			++success_cnt;
-//			//TODO:¶à´Î¼ÇÂ¼wait_time.dat
+//			//TODO:å¤šæ¬¡è®°å½•wait_time.dat
 //			pout2.println(timer+","+wait_time);
 		}else {
 			System.out.printf("Failure(ThreadId=%d): (%3d,%3d)->(%3d,%3d)\n",
@@ -126,17 +126,17 @@ public class CarSimulation implements Runnable{
 	}
 	
 	/**
-	 * ¿ªÊ¼run simulation
-	 * 1.³µ×ÓµÄÎ»ÖÃ¸üĞÂ
-	 * 2.Â·¿ÚºìÂÌµÆ×´Ì¬µÄ¸üĞÂ
-	 * 3.Â·¿Ú¶ÓÁĞµÄ¸üĞÂ,¹²4¸ö¶ÓÁĞ
+	 * å¼€å§‹run simulation
+	 * 1.è½¦å­çš„ä½ç½®æ›´æ–°
+	 * 2.è·¯å£çº¢ç»¿ç¯çŠ¶æ€çš„æ›´æ–°
+	 * 3.è·¯å£é˜Ÿåˆ—çš„æ›´æ–°,å…±4ä¸ªé˜Ÿåˆ—
 	 * @param enable_car_log
 	 * @param trace_car_number
-	 * ¸½´øcarÈÕÖ¾¹¦ÄÜ
+	 * é™„å¸¦caræ—¥å¿—åŠŸèƒ½
 	 */
 	public void run(boolean enable_car_log,int trace_car_number) {
-		--trace_car_number;//Ë÷Òı´Ó0¿ªÊ¼£¬ËùÓĞÏÈ¼õ1
-		int prev_x,prev_y;//±£´æmy_carµÄÉÏÒ»¸öÊ±¼äµÄ×ø±êÎ»ÖÃ
+		--trace_car_number;//ç´¢å¼•ä»0å¼€å§‹ï¼Œæ‰€ä»¥å…ˆå‡1
+		int prev_x,prev_y;//ä¿å­˜my_carçš„ä¸Šä¸€ä¸ªæ—¶é—´çš„åæ ‡ä½ç½®
 		for(int i=0;i<run_time;++i) {
 			if(enable_car_log) logger.car_log(other_cars.get(trace_car_number));
 			if(my_car.x==end_x&&my_car.y==end_y) {
@@ -145,24 +145,24 @@ public class CarSimulation implements Runnable{
 				timer=i+1;
 				break;
 			}
-			//¸üĞÂÂ·¿ÚµÄ×´Ì¬(ºìÂÌµÆ)
+			//æ›´æ–°è·¯å£çš„çŠ¶æ€(çº¢ç»¿ç¯)
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
 					crossroads[m][n].update_state();
 				}
 			}
 
-			//¸üĞÂ³µ×ÓµÄ×´Ì¬(»¹Ã»ÓĞgo)
+			//æ›´æ–°è½¦å­çš„çŠ¶æ€(è¿˜æ²¡æœ‰go)
 			for(Car tmp:other_cars) {
-				if(tmp.is_crossroad()&&!tmp.inQueue) {//Bug!!!×¢Òâ:ÒÑ¾­Èë¶ÓµÄ³µ×Ó¾Í²»ÒªÔÙÖØ¸´Èë¶ÓÁË
-					//1.¼ÓÈëÂ·¿Ú¶ÓÁĞ
+				if(tmp.is_crossroad()&&!tmp.inQueue) {//Bug!!!æ³¨æ„:å·²ç»å…¥é˜Ÿçš„è½¦å­å°±ä¸è¦å†é‡å¤å…¥é˜Ÿäº†
+					//1.åŠ å…¥è·¯å£é˜Ÿåˆ—
 					if(tmp.direction==Direction.UP) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].down_queue.add(tmp);
 					if(tmp.direction==Direction.DOWN) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].up_queue.add(tmp);
 					if(tmp.direction==Direction.LEFT) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].right_queue.add(tmp);
 					if(tmp.direction==Direction.RIGHT) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].left_queue.add(tmp);
 					tmp.inQueue=true;
 				}
-				//2.ÔÚ²íÂ·¿Ú,ĞèÒªÖØĞÂÉèÖÃ³µ×ÓµÄnext_direction,ÌØ±ğ×¢ÒâÈı²íÂ·¿Ú,Ò»¶¨Òª¸üĞÂ,·ñÔò×îºó³µ×Ó»áÊÕÁ²µ½ËÄ±ßÅÇ»²
+				//2.åœ¨å²”è·¯å£,éœ€è¦é‡æ–°è®¾ç½®è½¦å­çš„next_direction,ç‰¹åˆ«æ³¨æ„ä¸‰å²”è·¯å£,ä¸€å®šè¦æ›´æ–°,å¦åˆ™æœ€åè½¦å­ä¼šæ”¶æ•›åˆ°å››è¾¹å¾˜å¾Š
 				if(tmp.x%Constant.cell_length==0&&tmp.y%Constant.cell_length==0) {
 					if(tmp.number==Constant.cars_number+1) naive_search_direction(my_car,end_x,end_y);
 					else naive_search_direction(other_cars.get(tmp.number-1),car_dst.get(tmp.number-1).x,car_dst.get(tmp.number-1).y);
@@ -170,35 +170,35 @@ public class CarSimulation implements Runnable{
 			}
 			
 			prev_x=my_car.x;
-			prev_y=my_car.y;//±£´æmy_carµÄÉÏÒ»¸öÊ±¼äµÄ×ø±êÎ»ÖÃ
-			//¸üĞÂ³µ×ÓµÄ×´Ì¬(¿ªÊ¼go)
-			//1.´¦Àí²»ÔÚµÈ´ı¶ÓÁĞÀïµÄ³µ×Ó
+			prev_y=my_car.y;//ä¿å­˜my_carçš„ä¸Šä¸€ä¸ªæ—¶é—´çš„åæ ‡ä½ç½®
+			//æ›´æ–°è½¦å­çš„çŠ¶æ€(å¼€å§‹go)
+			//1.å¤„ç†ä¸åœ¨ç­‰å¾…é˜Ÿåˆ—é‡Œçš„è½¦å­
 			for(Car tmp:other_cars) {
-				if(!tmp.inQueue) {//²»ÔÚµÈ´ı¶ÓÁĞÖĞ
+				if(!tmp.inQueue) {//ä¸åœ¨ç­‰å¾…é˜Ÿåˆ—ä¸­
 					tmp.car_go();
 				}
 			}
-			//2.´¦ÀíÔÚÂ·¿Ú¶ÓÁĞµÄ³µ×ÓµÄ×´Ì¬
+			//2.å¤„ç†åœ¨è·¯å£é˜Ÿåˆ—çš„è½¦å­çš„çŠ¶æ€
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
-					//1).´¦ÀíÉÏ¶ÓÁĞ,ÔÊĞíÆäµôÍ··µ»Ø
+					//1).å¤„ç†ä¸Šé˜Ÿåˆ—,å…è®¸å…¶æ‰å¤´è¿”å›
 					if(!crossroads[m][n].up_queue.isEmpty()) {
 						Car c=crossroads[m][n].up_queue.peek();
 						if(c.direction==Direction.DOWN||c.direction==Direction.UP) {
-							if(crossroads[m][n].greenlight_time>0) {//ÉÏÏÂÂÌµÆ£¬¿É×ß
+							if(crossroads[m][n].greenlight_time>0) {//ä¸Šä¸‹ç»¿ç¯ï¼Œå¯èµ°
 								c.car_go();
-								c.inQueue=false;//²»ÔÚ¶ÓÁĞÀïÃæÁË
+								c.inQueue=false;//ä¸åœ¨é˜Ÿåˆ—é‡Œé¢äº†
 								crossroads[m][n].up_queue.remove();
 							}
 						}else if(c.direction==Direction.LEFT||c.direction==Direction.RIGHT) {
-							if(crossroads[m][n].redlight_time>0) {//ÉÏÏÂºìµÆ£¬¼´×óÓÒÂÌµÆ£¬¿É×ß
+							if(crossroads[m][n].redlight_time>0) {//ä¸Šä¸‹çº¢ç¯ï¼Œå³å·¦å³ç»¿ç¯ï¼Œå¯èµ°
 								c.car_go();
 								c.inQueue=false;
 								crossroads[m][n].up_queue.remove();
 							}
 						}
 					}
-					//2).´¦ÀíÏÂ¶ÓÁĞ
+					//2).å¤„ç†ä¸‹é˜Ÿåˆ—
 					if(!crossroads[m][n].down_queue.isEmpty()) {
 						Car c=crossroads[m][n].down_queue.peek();
 						if(c.direction==Direction.DOWN||c.direction==Direction.UP) {
@@ -215,7 +215,7 @@ public class CarSimulation implements Runnable{
 							}
 						}
 					}
-					//3).´¦Àí×ó¶ÓÁĞ
+					//3).å¤„ç†å·¦é˜Ÿåˆ—
 					if(!crossroads[m][n].left_queue.isEmpty()) {
 						Car c=crossroads[m][n].left_queue.peek();
 						if(c.direction==Direction.UP||c.direction==Direction.DOWN) {
@@ -232,7 +232,7 @@ public class CarSimulation implements Runnable{
 							}
 						}
 					}
-					//4).´¦ÀíÓÒ¶ÓÁĞ
+					//4).å¤„ç†å³é˜Ÿåˆ—
 					if(!crossroads[m][n].right_queue.isEmpty()) {
 						Car c=crossroads[m][n].right_queue.peek();
 						if(c.direction==Direction.UP||c.direction==Direction.DOWN) {
@@ -259,9 +259,9 @@ public class CarSimulation implements Runnable{
 		
 	}
 	
-//	//¼ÇÂ¼Êı¾İÊ±,²»ÄÜ¿ª¶àÏß³Ì,·ñÔòÊı¾İ»á´íÂÒ
-//	public static PrintWriter pout=null;//¼ÇÂ¼crossroads_queue.dat
-//	public static PrintWriter pout2=null;//¼ÇÂ¼wait_time.dat
+//	//è®°å½•æ•°æ®æ—¶,ä¸èƒ½å¼€å¤šçº¿ç¨‹,å¦åˆ™æ•°æ®ä¼šé”™ä¹±
+//	public static PrintWriter pout=null;//è®°å½•crossroads_queue.dat
+//	public static PrintWriter pout2=null;//è®°å½•wait_time.dat
 //	static {
 //		try {
 //			pout2=new PrintWriter(new FileWriter("wait_time.dat"),true);
@@ -271,7 +271,7 @@ public class CarSimulation implements Runnable{
 //		pout2.println("Total Time,Total Wait Time");
 //	}
 	/**
-	 * Éú³É±ê×¼ÈÕÖ¾±ê×¼ÈÕÖ¾
+	 * ç”Ÿæˆæ ‡å‡†æ—¥å¿—æ ‡å‡†æ—¥å¿—
 	 * @param enable_standard_log
 	 */
 	public void run(boolean enable_standard_log) {
@@ -280,7 +280,7 @@ public class CarSimulation implements Runnable{
 			logger.cars_log(other_cars);
 			logger.crossroads_log(crossroads);
 		}
-		int prev_x,prev_y;//±£´æmy_carµÄÉÏÒ»¸öÊ±¼äµÄ×ø±êÎ»ÖÃ
+		int prev_x,prev_y;//ä¿å­˜my_carçš„ä¸Šä¸€ä¸ªæ—¶é—´çš„åæ ‡ä½ç½®
 //		try {
 //			pout=new PrintWriter(new FileWriter("crossroads_queue.dat"),true);
 //		} catch (IOException e) {
@@ -296,8 +296,8 @@ public class CarSimulation implements Runnable{
 				timer=i+1;
 				break;
 			}
-			//ÈôÓĞÆäËûÎ»ÖÃµ½´ïÄ¿µÄµØ¾ÍÈÃÆäÏûÊ§,ÔÙ²¹³äÏàÓ¦³µ×Ó
-			//(ÆäÊµĞŞ¸Ä³µ×ÓµÄÎ»ÖÃ¼´¿É,Ò²ÖØĞÂ¹æ»®ÆäÄ¿µÄµØ,ÒòÎªÄ¿µÄµØ¶¼ÔÚÂ·¿Ú,²»¿ÉÄÜÈë¶ÓÁĞ,¹Ê¶ÓÁĞ²»ĞèÒªĞŞ¸´×´Ì¬)
+			//è‹¥æœ‰å…¶ä»–ä½ç½®åˆ°è¾¾ç›®çš„åœ°å°±è®©å…¶æ¶ˆå¤±,å†è¡¥å……ç›¸åº”è½¦å­
+			//(å…¶å®ä¿®æ”¹è½¦å­çš„ä½ç½®å³å¯,ä¹Ÿé‡æ–°è§„åˆ’å…¶ç›®çš„åœ°,å› ä¸ºç›®çš„åœ°éƒ½åœ¨è·¯å£,ä¸å¯èƒ½å…¥é˜Ÿåˆ—,æ•…é˜Ÿåˆ—ä¸éœ€è¦ä¿®å¤çŠ¶æ€)
 			for(Car tmp:other_cars) {
 				if(tmp.number!=Constant.cars_number+1) {
 					if(tmp.x==car_dst.get(tmp.number).x&&tmp.y==car_dst.get(tmp.number).y) {
@@ -308,11 +308,11 @@ public class CarSimulation implements Runnable{
 					}
 				}
 			}
-			//¸üĞÂÂ·¿ÚµÄ×´Ì¬(ºìÂÌµÆ)
+			//æ›´æ–°è·¯å£çš„çŠ¶æ€(çº¢ç»¿ç¯)
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
 					crossroads[m][n].update_state();
-					//TODO:¼ÇÂ¼Ã¿¸öÂ·¿ÚµÄ¶ÓÁĞ³¤¶È
+					//TODO:è®°å½•æ¯ä¸ªè·¯å£çš„é˜Ÿåˆ—é•¿åº¦
 //					crossroad_queue_size[m][n][0]=crossroads[m][n].up_queue.size();
 //					crossroad_queue_size[m][n][1]=crossroads[m][n].down_queue.size();
 //					crossroad_queue_size[m][n][2]=crossroads[m][n].left_queue.size();
@@ -322,20 +322,20 @@ public class CarSimulation implements Runnable{
 //							+","+crossroad_queue_size[m][n][2]+","+crossroad_queue_size[m][n][3]);
 				}
 			}
-			//pout.println(-(i+1)+","+-(i+1)+","+-(i+1)+","+-(i+1));//°ÑÔËĞĞÊ±¼ä(i+1)µ±×÷½áÎ²±ê¼Ç
-			//¸üĞÂ³µ×ÓµÄ×´Ì¬(»¹Ã»ÓĞgo)
+			//pout.println(-(i+1)+","+-(i+1)+","+-(i+1)+","+-(i+1));//æŠŠè¿è¡Œæ—¶é—´(i+1)å½“ä½œç»“å°¾æ ‡è®°
+			//æ›´æ–°è½¦å­çš„çŠ¶æ€(è¿˜æ²¡æœ‰go)
 			for(Car tmp:other_cars) {
-				if(tmp.is_crossroad()&&!tmp.inQueue) {//×¢Òâ:ÒÑ¾­Èë¶ÓµÄ³µ×Ó¾Í²»ÒªÔÙÖØ¸´Èë¶ÓÁË
-					//1.¼ÓÈëÂ·¿Ú¶ÓÁĞ
+				if(tmp.is_crossroad()&&!tmp.inQueue) {//æ³¨æ„:å·²ç»å…¥é˜Ÿçš„è½¦å­å°±ä¸è¦å†é‡å¤å…¥é˜Ÿäº†
+					//1.åŠ å…¥è·¯å£é˜Ÿåˆ—
 					if(tmp.direction==Direction.UP) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].down_queue.add(tmp);
 					if(tmp.direction==Direction.DOWN) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].up_queue.add(tmp);
 					if(tmp.direction==Direction.LEFT) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].right_queue.add(tmp);
 					if(tmp.direction==Direction.RIGHT) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].left_queue.add(tmp);
 					tmp.inQueue=true;
 				}
-				//2.ÔÚ²íÂ·¿Ú,ĞèÒªÖØĞÂÉèÖÃ³µ×ÓµÄnext_direction,ÌØ±ğ×¢ÒâÈı²íÂ·¿Ú,Ò»¶¨Òª¸üĞÂ,·ñÔò×îºó³µ×Ó»áÊÕÁ²µ½ËÄ±ßÅÇ»²
+				//2.åœ¨å²”è·¯å£,éœ€è¦é‡æ–°è®¾ç½®è½¦å­çš„next_direction,ç‰¹åˆ«æ³¨æ„ä¸‰å²”è·¯å£,ä¸€å®šè¦æ›´æ–°,å¦åˆ™æœ€åè½¦å­ä¼šæ”¶æ•›åˆ°å››è¾¹å¾˜å¾Š
 				if(tmp.x%Constant.cell_length==0&&tmp.y%Constant.cell_length==0) {
-					//TODO:¿¼ÂÇÒ»¸ö×´¿ö,µ±ÓĞ¶àÁ¾³µÓĞ¹Ì¶¨ÆğµãÓëÖÕµãÊ±,·ÂÕæ»á·¢ÉúÊ²Ã´Çé¿ö
+					//TODO:è€ƒè™‘ä¸€ä¸ªçŠ¶å†µ,å½“æœ‰å¤šè¾†è½¦æœ‰å›ºå®šèµ·ç‚¹ä¸ç»ˆç‚¹æ—¶,ä»¿çœŸä¼šå‘ç”Ÿä»€ä¹ˆæƒ…å†µ
 					if(tmp.number==Constant.cars_number+1) naive_search_direction(my_car,end_x,end_y);
 					else naive_search_direction(other_cars.get(tmp.number-1),car_dst.get(tmp.number-1).x,car_dst.get(tmp.number-1).y);
 				}
@@ -343,40 +343,40 @@ public class CarSimulation implements Runnable{
 			
 			prev_x=my_car.x;
 			prev_y=my_car.y;
-			//¸üĞÂ³µ×ÓµÄ×´Ì¬(¿ªÊ¼go)
-			//1.´¦Àí²»ÔÚµÈ´ı¶ÓÁĞÀïµÄ³µ×Ó
+			//æ›´æ–°è½¦å­çš„çŠ¶æ€(å¼€å§‹go)
+			//1.å¤„ç†ä¸åœ¨ç­‰å¾…é˜Ÿåˆ—é‡Œçš„è½¦å­
 			for(Car tmp:other_cars) {
-				if(!tmp.inQueue) {//²»ÔÚµÈ´ı¶ÓÁĞÖĞ
+				if(!tmp.inQueue) {//ä¸åœ¨ç­‰å¾…é˜Ÿåˆ—ä¸­
 					tmp.car_go();
 				}
 			}
-			//2.´¦ÀíÔÚÂ·¿Ú¶ÓÁĞµÄ³µ×ÓµÄ×´Ì¬(ÓÒ±ßÂÌµÆÍùÓÒ¿ÉĞĞ,×ó±ßºìµÆÍù×ó¿ÉĞĞ)
+			//2.å¤„ç†åœ¨è·¯å£é˜Ÿåˆ—çš„è½¦å­çš„çŠ¶æ€(å³è¾¹ç»¿ç¯å¾€å³å¯è¡Œ,å·¦è¾¹çº¢ç¯å¾€å·¦å¯è¡Œ)
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
-					//1).´¦ÀíÉÏ¶ÓÁĞ,ÔÊĞíÆäµôÍ··µ»Ø
+					//1).å¤„ç†ä¸Šé˜Ÿåˆ—,å…è®¸å…¶æ‰å¤´è¿”å›
 					if(!crossroads[m][n].up_queue.isEmpty()) {
 						Car c=crossroads[m][n].up_queue.peek();
 						if(c.direction==Direction.DOWN||c.direction==Direction.UP) {
-							if(crossroads[m][n].greenlight_time>0) {//ÉÏÏÂÂÌµÆ£¬¿É×ß
+							if(crossroads[m][n].greenlight_time>0) {//ä¸Šä¸‹ç»¿ç¯ï¼Œå¯èµ°
 								c.car_go();
-								c.inQueue=false;//²»ÔÚ¶ÓÁĞÀïÃæÁË
+								c.inQueue=false;//ä¸åœ¨é˜Ÿåˆ—é‡Œé¢äº†
 								crossroads[m][n].up_queue.remove();
 							}
 						}else if(c.direction==Direction.LEFT) {
-							if(crossroads[m][n].redlight_time>0) {//ÉÏÏÂºìµÆ£¬¼´×óÓÒÂÌµÆ£¬´¦ÓÚÉÏ·½£¬¿ÉÍù×ó×ß
+							if(crossroads[m][n].redlight_time>0) {//ä¸Šä¸‹çº¢ç¯ï¼Œå³å·¦å³ç»¿ç¯ï¼Œå¤„äºä¸Šæ–¹ï¼Œå¯å¾€å·¦èµ°
 								c.car_go();
 								c.inQueue=false;
 								crossroads[m][n].up_queue.remove();
 							}
 						}else if(c.direction==Direction.RIGHT) {
-							if(crossroads[m][n].greenlight_time>0) {//ÉÏÏÂÂÌµÆ£¬¼´×óÓÒºìµÆ£¬´¦ÓÚÉÏ·½£¬¿ÉÍùÓÒ×ß
+							if(crossroads[m][n].greenlight_time>0) {//ä¸Šä¸‹ç»¿ç¯ï¼Œå³å·¦å³çº¢ç¯ï¼Œå¤„äºä¸Šæ–¹ï¼Œå¯å¾€å³èµ°
 								c.car_go();
 								c.inQueue=false;
 								crossroads[m][n].up_queue.remove();
 							}
 						}
 					}
-					//2).´¦ÀíÏÂ¶ÓÁĞ
+					//2).å¤„ç†ä¸‹é˜Ÿåˆ—
 					if(!crossroads[m][n].down_queue.isEmpty()) {
 						Car c=crossroads[m][n].down_queue.peek();
 						if(c.direction==Direction.DOWN||c.direction==Direction.UP) {
@@ -386,20 +386,20 @@ public class CarSimulation implements Runnable{
 								crossroads[m][n].down_queue.remove();
 							}
 						}else if(c.direction==Direction.LEFT) {
-							if(crossroads[m][n].greenlight_time>0) {//×óÓÒºìµÆ(ÉÏÏÂÂÌµÆ)²ÅÄÜ×ß
+							if(crossroads[m][n].greenlight_time>0) {//å·¦å³çº¢ç¯(ä¸Šä¸‹ç»¿ç¯)æ‰èƒ½èµ°
 								c.car_go();
 								c.inQueue=false;
 								crossroads[m][n].down_queue.remove();
 							}
 						}else if(c.direction==Direction.RIGHT) {
-							if(crossroads[m][n].greenlight_time>0) {//×óÓÒÂÌµÆ(ÉÏÏÂºìµÆ)²ÅÄÜ×ß
+							if(crossroads[m][n].greenlight_time>0) {//å·¦å³ç»¿ç¯(ä¸Šä¸‹çº¢ç¯)æ‰èƒ½èµ°
 								c.car_go();
 								c.inQueue=false;
 								crossroads[m][n].down_queue.remove();
 							}
 						}
 					}
-					//3).´¦Àí×ó¶ÓÁĞ
+					//3).å¤„ç†å·¦é˜Ÿåˆ—
 					if(!crossroads[m][n].left_queue.isEmpty()) {
 						Car c=crossroads[m][n].left_queue.peek();
 						if(c.direction==Direction.LEFT||c.direction==Direction.RIGHT) {
@@ -422,7 +422,7 @@ public class CarSimulation implements Runnable{
 							}
 						}
 					}
-					//4).´¦ÀíÓÒ¶ÓÁĞ
+					//4).å¤„ç†å³é˜Ÿåˆ—
 					if(!crossroads[m][n].right_queue.isEmpty()) {
 						Car c=crossroads[m][n].right_queue.peek();
 						if(c.direction==Direction.LEFT||c.direction==Direction.RIGHT) {
@@ -460,7 +460,7 @@ public class CarSimulation implements Runnable{
 	}
 	
 	/**
-	 * ´òÓ¡¶ÔÓ¦×ø±ê(trace_crossroad_x,trace_crossroad_y)Â·¿ÚµÄÈÕÖ¾£¨ËÄ¸öµÈ´ı¶ÓÁĞ£¬ºìÂÌµÆ×´Ì¬£©
+	 * æ‰“å°å¯¹åº”åæ ‡(trace_crossroad_x,trace_crossroad_y)è·¯å£çš„æ—¥å¿—ï¼ˆå››ä¸ªç­‰å¾…é˜Ÿåˆ—ï¼Œçº¢ç»¿ç¯çŠ¶æ€ï¼‰
 	 * @param enable_crossroad_log
 	 * @param trace_crossroad_x
 	 * @param trace_crossroad_y
@@ -475,17 +475,17 @@ public class CarSimulation implements Runnable{
 				timer=i+1;
 				break;
 			}
-			//¸üĞÂÂ·¿ÚµÄ×´Ì¬(ºìÂÌµÆ)
+			//æ›´æ–°è·¯å£çš„çŠ¶æ€(çº¢ç»¿ç¯)
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
 					crossroads[m][n].update_state();
 				}
 			}
 			
-			//¸üĞÂ³µ×ÓµÄ×´Ì¬(»¹Ã»ÓĞgo)
+			//æ›´æ–°è½¦å­çš„çŠ¶æ€(è¿˜æ²¡æœ‰go)
 			for(Car tmp:other_cars) {
 				if(tmp.is_crossroad()&&!tmp.inQueue) {
-					//1.¼ÓÈëÂ·¿Ú¶ÓÁĞ
+					//1.åŠ å…¥è·¯å£é˜Ÿåˆ—
 					if(tmp.direction==Direction.UP) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].down_queue.add(tmp);
 					if(tmp.direction==Direction.DOWN) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].up_queue.add(tmp);
 					if(tmp.direction==Direction.LEFT) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].right_queue.add(tmp);
@@ -493,40 +493,40 @@ public class CarSimulation implements Runnable{
 					tmp.inQueue=true;
 				}
 				if(tmp.x%Constant.cell_length==0&&tmp.y%Constant.cell_length==0) {
-					//2.ÔÚ²íÂ·¿Ú,ĞèÒªÖØĞÂÉèÖÃ³µ×ÓµÄnext_direction,ÌØ±ğ×¢ÒâÈı²íÂ·¿Ú,Ò»¶¨Òª¸üĞÂ,·ñÔò×îºó³µ×Ó»áÊÕÁ²µ½ËÄ±ßÅÇ»²
+					//2.åœ¨å²”è·¯å£,éœ€è¦é‡æ–°è®¾ç½®è½¦å­çš„next_direction,ç‰¹åˆ«æ³¨æ„ä¸‰å²”è·¯å£,ä¸€å®šè¦æ›´æ–°,å¦åˆ™æœ€åè½¦å­ä¼šæ”¶æ•›åˆ°å››è¾¹å¾˜å¾Š
 					if(tmp.number==Constant.cars_number+1) naive_search_direction(my_car,end_x,end_y);
 					else naive_search_direction(other_cars.get(tmp.number-1),car_dst.get(tmp.number-1).x,car_dst.get(tmp.number-1).y);
 				}
 			}
 			
-			//¸üĞÂ³µ×ÓµÄ×´Ì¬(¿ªÊ¼go)
-			//2.ÔÙ´¦Àí²»ÔÚµÈ´ı¶ÓÁĞÀïµÄ³µ×Ó
+			//æ›´æ–°è½¦å­çš„çŠ¶æ€(å¼€å§‹go)
+			//2.å†å¤„ç†ä¸åœ¨ç­‰å¾…é˜Ÿåˆ—é‡Œçš„è½¦å­
 			for(Car tmp:other_cars) {
-				if(!tmp.inQueue) {//²»ÔÚµÈ´ı¶ÓÁĞÖĞ
+				if(!tmp.inQueue) {//ä¸åœ¨ç­‰å¾…é˜Ÿåˆ—ä¸­
 					tmp.car_go();
 				}
 			}
-			//1.ÏÈ´¦ÀíÔÚÂ·¿Ú¶ÓÁĞµÄ³µ×ÓµÄ×´Ì¬
+			//1.å…ˆå¤„ç†åœ¨è·¯å£é˜Ÿåˆ—çš„è½¦å­çš„çŠ¶æ€
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
-					//1).´¦ÀíÉÏ¶ÓÁĞ
+					//1).å¤„ç†ä¸Šé˜Ÿåˆ—
 					if(!crossroads[m][n].up_queue.isEmpty()) {
 						Car c=crossroads[m][n].up_queue.peek();
 						if(c.direction==Direction.UP||c.direction==Direction.DOWN) {
-							if(crossroads[m][n].greenlight_time>0) {//ÉÏÏÂÂÌµÆ£¬¿É×ß
+							if(crossroads[m][n].greenlight_time>0) {//ä¸Šä¸‹ç»¿ç¯ï¼Œå¯èµ°
 								c.car_go();
 								c.inQueue=false;
 								crossroads[m][n].up_queue.remove();
 							}
 						}else if(c.direction==Direction.LEFT||c.direction==Direction.RIGHT) {
-							if(crossroads[m][n].redlight_time>0) {//ÉÏÏÂºìµÆ£¬¼´×óÓÒÂÌµÆ£¬¿É×ß
+							if(crossroads[m][n].redlight_time>0) {//ä¸Šä¸‹çº¢ç¯ï¼Œå³å·¦å³ç»¿ç¯ï¼Œå¯èµ°
 								c.car_go();
 								c.inQueue=false;
 								crossroads[m][n].up_queue.remove();
 							}
 						}
 					}
-					//2).´¦ÀíÏÂ¶ÓÁĞ
+					//2).å¤„ç†ä¸‹é˜Ÿåˆ—
 					if(!crossroads[m][n].down_queue.isEmpty()) {
 						Car c=crossroads[m][n].down_queue.peek();
 						if(c.direction==Direction.UP||c.direction==Direction.DOWN) {
@@ -543,7 +543,7 @@ public class CarSimulation implements Runnable{
 							}
 						}
 					}
-					//3).´¦Àí×ó¶ÓÁĞ
+					//3).å¤„ç†å·¦é˜Ÿåˆ—
 					if(!crossroads[m][n].left_queue.isEmpty()) {
 						Car c=crossroads[m][n].left_queue.peek();
 						if(c.direction==Direction.UP||c.direction==Direction.DOWN) {
@@ -560,7 +560,7 @@ public class CarSimulation implements Runnable{
 							}
 						}
 					}
-					//4).´¦ÀíÓÒ¶ÓÁĞ
+					//4).å¤„ç†å³é˜Ÿåˆ—
 					if(!crossroads[m][n].right_queue.isEmpty()) {
 						Car c=crossroads[m][n].right_queue.peek();
 						if(c.direction==Direction.UP||c.direction==Direction.DOWN) {
@@ -582,128 +582,128 @@ public class CarSimulation implements Runnable{
 		}	
 	}
 	/**
-	 * my_carÑ°Â·,Õâ¸öº¯ÊıÓ¦¸Ã²åÈëµ½run()ÀïÃæµÄÑ­»·ÖĞÔËĞĞ
-	  *  ¼òµ¥µØÒÔÄ¿Ç°Î»ÖÃÓëÄ¿±êÎ»ÖÃµÄ¾àÀëÎª»ù×¼,²»¶ÏËõ¶ÌÁ½Õß¼äµÄ¾àÀë,×îÖÕ´ïµ½Ä¿µÄµØ
+	 * my_carå¯»è·¯,è¿™ä¸ªå‡½æ•°åº”è¯¥æ’å…¥åˆ°run()é‡Œé¢çš„å¾ªç¯ä¸­è¿è¡Œ
+	  *  ç®€å•åœ°ä»¥ç›®å‰ä½ç½®ä¸ç›®æ ‡ä½ç½®çš„è·ç¦»ä¸ºåŸºå‡†,ä¸æ–­ç¼©çŸ­ä¸¤è€…é—´çš„è·ç¦»,æœ€ç»ˆè¾¾åˆ°ç›®çš„åœ°
 	 * 
 	 */
 
 	public void naive_search_direction(Car my_car,int end_x,int end_y) {
-		if(my_car.inQueue) return;//ÔÚµÈ´ı¶ÓÁĞÀïÃæ¾Í²»ÓÃµ÷Õû·½ÏòÁË
-		//ÅĞ¶Ï°´µ±Ç°·½ÏòĞĞÊ»µÄ»°ÄÜ·ñÊ¹¾àÀëËõ¶Ì,Èô²»ÄÜ¾Í¸Ä±ä·½Ïò
+		if(my_car.inQueue) return;//åœ¨ç­‰å¾…é˜Ÿåˆ—é‡Œé¢å°±ä¸ç”¨è°ƒæ•´æ–¹å‘äº†
+		//åˆ¤æ–­æŒ‰å½“å‰æ–¹å‘è¡Œé©¶çš„è¯èƒ½å¦ä½¿è·ç¦»ç¼©çŸ­,è‹¥ä¸èƒ½å°±æ”¹å˜æ–¹å‘
 		if(my_car.direction==Direction.UP) {
-			if(end_y<my_car.y);//°´ÕÕµ±Ç°·½ÏòĞĞÊ»»áÊ¹¾àÀëËõ¶ÌµÄ»°¾Í²»¹ÜËüÁË
-			else {//²»ÄÜÊ¹¾àÀëËõ¶Ì,ÆäÊµÕâÖÖÇé¿öÖ»¿ÉÄÜ·¢ÉúÔÚÂ·¿Ú
-				//µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÉÏ·½
-				if(end_x>my_car.x) {//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄ×óÉÏ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÏÂ»òÍùÓÒ¼´¿É
+			if(end_y<my_car.y);//æŒ‰ç…§å½“å‰æ–¹å‘è¡Œé©¶ä¼šä½¿è·ç¦»ç¼©çŸ­çš„è¯å°±ä¸ç®¡å®ƒäº†
+			else {//ä¸èƒ½ä½¿è·ç¦»ç¼©çŸ­,å…¶å®è¿™ç§æƒ…å†µåªå¯èƒ½å‘ç”Ÿåœ¨è·¯å£
+				//å½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„ä¸Šæ–¹
+				if(end_x>my_car.x) {//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å·¦ä¸Šæ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸‹æˆ–å¾€å³å³å¯
 					
-					//×¢Òâ:¿ÉÑ¡µÄÕâÁ½¸ö·½Ïò,Ó¦¸ÃÈ¥Ñ¡ÂÌµÆ×´Ì¬µÄÄÇ¸ö
-					if(my_car.is_crossroad()) {//ÔÚÊ®×ÖÂ·¿Ú²ÅĞèÒªÅĞ¶ÏºìÂÌµÆ(ÇÒÊÇÔÚ¶ÓÁĞÍ·)
+					//æ³¨æ„:å¯é€‰çš„è¿™ä¸¤ä¸ªæ–¹å‘,åº”è¯¥å»é€‰ç»¿ç¯çŠ¶æ€çš„é‚£ä¸ª
+					if(my_car.is_crossroad()) {//åœ¨åå­—è·¯å£æ‰éœ€è¦åˆ¤æ–­çº¢ç»¿ç¯(ä¸”æ˜¯åœ¨é˜Ÿåˆ—å¤´)
 						if(crossroads[my_car.x/Constant.cell_length][my_car.y/Constant.cell_length].greenlight_time>0) my_car.direction=Direction.DOWN;
 						else my_car.direction=Direction.RIGHT;
-					}else {//ÔÚÈı²æÂ·¿Ú,¾ÍËæ±ãÑ¡Ò»¸ö·½Ïò¼´¿É
+					}else {//åœ¨ä¸‰å‰è·¯å£,å°±éšä¾¿é€‰ä¸€ä¸ªæ–¹å‘å³å¯
 						if(r.nextBoolean()) my_car.direction=Direction.DOWN;
 						else my_car.direction=Direction.RIGHT;
 					}
 					
-				}else if(end_x<my_car.x) {//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÓÒÉÏ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÏÂ»òÍù×ó¼´¿É
-					if(my_car.is_crossroad()) {//ÔÚÊ®×ÖÂ·¿Ú²ÅĞèÒªÅĞ¶ÏºìÂÌµÆ
+				}else if(end_x<my_car.x) {//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å³ä¸Šæ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸‹æˆ–å¾€å·¦å³å¯
+					if(my_car.is_crossroad()) {//åœ¨åå­—è·¯å£æ‰éœ€è¦åˆ¤æ–­çº¢ç»¿ç¯
 						if(crossroads[my_car.x/Constant.cell_length][my_car.y/Constant.cell_length].greenlight_time>0) my_car.direction=Direction.DOWN;
 						else my_car.direction=Direction.LEFT;
-					}else {//ÔÚÈı²æÂ·¿Ú,¾ÍËæ±ãÑ¡Ò»¸ö·½Ïò¼´¿É
+					}else {//åœ¨ä¸‰å‰è·¯å£,å°±éšä¾¿é€‰ä¸€ä¸ªæ–¹å‘å³å¯
 						if(r.nextBoolean()) my_car.direction=Direction.DOWN;
 						else my_car.direction=Direction.LEFT;
 					}
-				}else if(end_x==my_car.x){//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÕıÉÏ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÏÂ¼´¿É
+				}else if(end_x==my_car.x){//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„æ­£ä¸Šæ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸‹å³å¯
 					my_car.direction=Direction.DOWN;
 				}
 			}
 		}
 		
 		if(my_car.direction==Direction.DOWN) {
-			if(end_y>my_car.y);//°´ÕÕµ±Ç°·½ÏòĞĞÊ»»áÊ¹¾àÀëËõ¶ÌµÄ»°¾Í²»¹ÜËüÁË
-			else {//²»ÄÜÊ¹¾àÀëËõ¶Ì,ÆäÊµÕâÖÖÇé¿öÖ»¿ÉÄÜ·¢ÉúÔÚÂ·¿Ú
-				//µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÏÂ·½
-				if(end_x>my_car.x) {//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄ×óÏÂ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÉÏ»òÍùÓÒ¼´¿É
-					if(my_car.is_crossroad()) {//ÔÚÊ®×ÖÂ·¿Ú²ÅĞèÒªÅĞ¶ÏºìÂÌµÆ
+			if(end_y>my_car.y);//æŒ‰ç…§å½“å‰æ–¹å‘è¡Œé©¶ä¼šä½¿è·ç¦»ç¼©çŸ­çš„è¯å°±ä¸ç®¡å®ƒäº†
+			else {//ä¸èƒ½ä½¿è·ç¦»ç¼©çŸ­,å…¶å®è¿™ç§æƒ…å†µåªå¯èƒ½å‘ç”Ÿåœ¨è·¯å£
+				//å½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„ä¸‹æ–¹
+				if(end_x>my_car.x) {//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å·¦ä¸‹æ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸Šæˆ–å¾€å³å³å¯
+					if(my_car.is_crossroad()) {//åœ¨åå­—è·¯å£æ‰éœ€è¦åˆ¤æ–­çº¢ç»¿ç¯
 						if(crossroads[my_car.x/Constant.cell_length][my_car.y/Constant.cell_length].greenlight_time>0) my_car.direction=Direction.UP;
 						else my_car.direction=Direction.RIGHT;
-					}else {//ÔÚÈı²æÂ·¿Ú,¾ÍËæ±ãÑ¡Ò»¸ö·½Ïò¼´¿É
+					}else {//åœ¨ä¸‰å‰è·¯å£,å°±éšä¾¿é€‰ä¸€ä¸ªæ–¹å‘å³å¯
 						if(r.nextBoolean()) my_car.direction=Direction.UP;
 						else my_car.direction=Direction.RIGHT;
 					}
-				}else if(end_x<my_car.x) {//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÓÒÏÂ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÉÏ»òÍù×ó¼´¿É
-					if(my_car.is_crossroad()) {//ÔÚÊ®×ÖÂ·¿Ú²ÅĞèÒªÅĞ¶ÏºìÂÌµÆ
+				}else if(end_x<my_car.x) {//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å³ä¸‹æ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸Šæˆ–å¾€å·¦å³å¯
+					if(my_car.is_crossroad()) {//åœ¨åå­—è·¯å£æ‰éœ€è¦åˆ¤æ–­çº¢ç»¿ç¯
 						if(crossroads[my_car.x/Constant.cell_length][my_car.y/Constant.cell_length].greenlight_time>0) my_car.direction=Direction.UP;
 						else my_car.direction=Direction.LEFT;
-					}else {//ÔÚÈı²æÂ·¿Ú,¾ÍËæ±ãÑ¡Ò»¸ö·½Ïò¼´¿É
+					}else {//åœ¨ä¸‰å‰è·¯å£,å°±éšä¾¿é€‰ä¸€ä¸ªæ–¹å‘å³å¯
 						if(r.nextBoolean()) my_car.direction=Direction.UP;
 						else my_car.direction=Direction.LEFT;
 					}
-				}else if(end_x==my_car.x){//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÕıÏÂ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÉÏ¼´¿É
+				}else if(end_x==my_car.x){//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„æ­£ä¸‹æ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸Šå³å¯
 					my_car.direction=Direction.UP;
 				}
 			}
 		}
 		
 		if(my_car.direction==Direction.LEFT) {
-			if(end_x<my_car.x);//°´ÕÕµ±Ç°·½ÏòĞĞÊ»»áÊ¹¾àÀëËõ¶ÌµÄ»°¾Í²»¹ÜËüÁË
-			else {//²»ÄÜÊ¹¾àÀëËõ¶Ì,ÆäÊµÕâÖÖÇé¿öÖ»¿ÉÄÜ·¢ÉúÔÚÂ·¿Ú
-				//µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄ×ó·½
-				if(end_y>my_car.y) {//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄ×óÉÏ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÏÂ»òÍùÓÒ¼´¿É
-					if(my_car.is_crossroad()) {//ÔÚÊ®×ÖÂ·¿Ú²ÅĞèÒªÅĞ¶ÏºìÂÌµÆ
+			if(end_x<my_car.x);//æŒ‰ç…§å½“å‰æ–¹å‘è¡Œé©¶ä¼šä½¿è·ç¦»ç¼©çŸ­çš„è¯å°±ä¸ç®¡å®ƒäº†
+			else {//ä¸èƒ½ä½¿è·ç¦»ç¼©çŸ­,å…¶å®è¿™ç§æƒ…å†µåªå¯èƒ½å‘ç”Ÿåœ¨è·¯å£
+				//å½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å·¦æ–¹
+				if(end_y>my_car.y) {//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å·¦ä¸Šæ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸‹æˆ–å¾€å³å³å¯
+					if(my_car.is_crossroad()) {//åœ¨åå­—è·¯å£æ‰éœ€è¦åˆ¤æ–­çº¢ç»¿ç¯
 						if(crossroads[my_car.x/Constant.cell_length][my_car.y/Constant.cell_length].greenlight_time>0) my_car.direction=Direction.DOWN;
 						else my_car.direction=Direction.RIGHT;
-					}else {//ÔÚÈı²æÂ·¿Ú,¾ÍËæ±ãÑ¡Ò»¸ö·½Ïò¼´¿É
+					}else {//åœ¨ä¸‰å‰è·¯å£,å°±éšä¾¿é€‰ä¸€ä¸ªæ–¹å‘å³å¯
 						if(r.nextBoolean()) my_car.direction=Direction.DOWN;
 						else my_car.direction=Direction.RIGHT;
 					}
-				}else if(end_y<my_car.y) {//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄ×óÏÂ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÉÏ»òÍùÓÒ¼´¿É
-					if(my_car.is_crossroad()) {//ÔÚÊ®×ÖÂ·¿Ú²ÅĞèÒªÅĞ¶ÏºìÂÌµÆ
+				}else if(end_y<my_car.y) {//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å·¦ä¸‹æ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸Šæˆ–å¾€å³å³å¯
+					if(my_car.is_crossroad()) {//åœ¨åå­—è·¯å£æ‰éœ€è¦åˆ¤æ–­çº¢ç»¿ç¯
 						if(crossroads[my_car.x/Constant.cell_length][my_car.y/Constant.cell_length].greenlight_time>0) my_car.direction=Direction.UP;
 						else my_car.direction=Direction.RIGHT;
-					}else {//ÔÚÈı²æÂ·¿Ú,¾ÍËæ±ãÑ¡Ò»¸ö·½Ïò¼´¿É
+					}else {//åœ¨ä¸‰å‰è·¯å£,å°±éšä¾¿é€‰ä¸€ä¸ªæ–¹å‘å³å¯
 						if(r.nextBoolean()) my_car.direction=Direction.UP;
 						else my_car.direction=Direction.RIGHT;
 					}
-				}else if(end_y==my_car.y){//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÕı×ó·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÓÒ¼´¿É
+				}else if(end_y==my_car.y){//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„æ­£å·¦æ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€å³å³å¯
 					my_car.direction=Direction.RIGHT;
 				}
 			}
 		}
 		
 		if(my_car.direction==Direction.RIGHT) {
-			if(end_x>my_car.x);//°´ÕÕµ±Ç°·½ÏòĞĞÊ»»áÊ¹¾àÀëËõ¶ÌµÄ»°¾Í²»¹ÜËüÁË
-			else {//²»ÄÜÊ¹¾àÀëËõ¶Ì,ÆäÊµÕâÖÖÇé¿öÖ»¿ÉÄÜ·¢ÉúÔÚÂ·¿Ú
-				//µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÓÒ·½
-				if(end_y>my_car.y) {//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÓÒÉÏ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÏÂ»òÍù×ó¼´¿É
-					if(my_car.is_crossroad()) {//ÔÚÊ®×ÖÂ·¿Ú²ÅĞèÒªÅĞ¶ÏºìÂÌµÆ
+			if(end_x>my_car.x);//æŒ‰ç…§å½“å‰æ–¹å‘è¡Œé©¶ä¼šä½¿è·ç¦»ç¼©çŸ­çš„è¯å°±ä¸ç®¡å®ƒäº†
+			else {//ä¸èƒ½ä½¿è·ç¦»ç¼©çŸ­,å…¶å®è¿™ç§æƒ…å†µåªå¯èƒ½å‘ç”Ÿåœ¨è·¯å£
+				//å½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å³æ–¹
+				if(end_y>my_car.y) {//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å³ä¸Šæ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸‹æˆ–å¾€å·¦å³å¯
+					if(my_car.is_crossroad()) {//åœ¨åå­—è·¯å£æ‰éœ€è¦åˆ¤æ–­çº¢ç»¿ç¯
 						if(crossroads[my_car.x/Constant.cell_length][my_car.y/Constant.cell_length].greenlight_time>0) my_car.direction=Direction.DOWN;
 						else my_car.direction=Direction.LEFT;
-					}else {//ÔÚÈı²æÂ·¿Ú,¾ÍËæ±ãÑ¡Ò»¸ö·½Ïò¼´¿É
+					}else {//åœ¨ä¸‰å‰è·¯å£,å°±éšä¾¿é€‰ä¸€ä¸ªæ–¹å‘å³å¯
 						if(r.nextBoolean()) my_car.direction=Direction.DOWN;
 						else my_car.direction=Direction.LEFT;
 					}
-				}else if(end_y<my_car.y) {//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÓÒÏÂ·½
-					//ËùÒÔ½ÓÏÂÀ´ÍùÉÏ»òÍù×ó¼´¿É
-					if(my_car.is_crossroad()) {//ÔÚÊ®×ÖÂ·¿Ú²ÅĞèÒªÅĞ¶ÏºìÂÌµÆ
+				}else if(end_y<my_car.y) {//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„å³ä¸‹æ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€ä¸Šæˆ–å¾€å·¦å³å¯
+					if(my_car.is_crossroad()) {//åœ¨åå­—è·¯å£æ‰éœ€è¦åˆ¤æ–­çº¢ç»¿ç¯
 						if(crossroads[my_car.x/Constant.cell_length][my_car.y/Constant.cell_length].greenlight_time>0) my_car.direction=Direction.UP;
 						else my_car.direction=Direction.LEFT;
-					}else {//ÔÚÈı²æÂ·¿Ú,¾ÍËæ±ãÑ¡Ò»¸ö·½Ïò¼´¿É
+					}else {//åœ¨ä¸‰å‰è·¯å£,å°±éšä¾¿é€‰ä¸€ä¸ªæ–¹å‘å³å¯
 						if(r.nextBoolean()) my_car.direction=Direction.UP;
 						else my_car.direction=Direction.LEFT;
 					}
-				}else if(end_y==my_car.y){//È·¶¨µ±Ç°³µ×ÓÎ»ÖÃÔÚÄ¿µÄµãµÄÕıÓÒ·½
-					//ËùÒÔ½ÓÏÂÀ´Íù×ó¼´¿É
+				}else if(end_y==my_car.y){//ç¡®å®šå½“å‰è½¦å­ä½ç½®åœ¨ç›®çš„ç‚¹çš„æ­£å³æ–¹
+					//æ‰€ä»¥æ¥ä¸‹æ¥å¾€å·¦å³å¯
 					my_car.direction=Direction.LEFT;
 				}
 			}
@@ -713,12 +713,12 @@ public class CarSimulation implements Runnable{
 	
 	/**
 	 * 
-	 * ÒòÎªÆäËû³µ×ÓÔÚÂ·¿ÚµÄnext_directionÊÇËæ»úÉèÖÃµÄ,ËùÒÔÓÃdfsµÄ»°ÊÇ²»ÄÜ±£Ö¤»ØËİÇ°ºÍ»ØËİºóµÄĞĞÎªÒ»ÖÂ
-	 * ¶øÇÒmy_car×ß²»Í¬µÄÂ·¾¶µÄ»°Ò²»áÓ°Ïìµ½ÆäËü³µµÄĞĞÎª
-	 * ËùÒÔdfsÊÊÓÃµÄ³¡¾°ÆäÊµÊÇ:²»´æÔÚÆäËû³µ×Ó,Ö»ÓĞºìÂÌµÆ´æÔÚµÄÇé¿ö
-	 * ¹ÊÕâ¸öº¯ÊıÆäÊµÊÇÎŞ·¨Ê¹ÓÃÔÚdfsÀïÃæµÄ
+	 * å› ä¸ºå…¶ä»–è½¦å­åœ¨è·¯å£çš„next_directionæ˜¯éšæœºè®¾ç½®çš„,æ‰€ä»¥ç”¨dfsçš„è¯æ˜¯ä¸èƒ½ä¿è¯å›æº¯å‰å’Œå›æº¯åçš„è¡Œä¸ºä¸€è‡´
+	 * è€Œä¸”my_carèµ°ä¸åŒçš„è·¯å¾„çš„è¯ä¹Ÿä¼šå½±å“åˆ°å…¶å®ƒè½¦çš„è¡Œä¸º
+	 * æ‰€ä»¥dfsé€‚ç”¨çš„åœºæ™¯å…¶å®æ˜¯:ä¸å­˜åœ¨å…¶ä»–è½¦å­,åªæœ‰çº¢ç»¿ç¯å­˜åœ¨çš„æƒ…å†µ
+	 * æ•…è¿™ä¸ªå‡½æ•°å…¶å®æ˜¯æ— æ³•ä½¿ç”¨åœ¨dfsé‡Œé¢çš„
 	 * @param direction
-	 * my_car´Óµ±Ç°Â·¿ÚÑØ×Ådirection·½Ïò´ïµ½ÁíÒ»¸öÂ·¿Ú(°üÀ¨Èı²íÂ·¿Ú)
+	 * my_carä»å½“å‰è·¯å£æ²¿ç€directionæ–¹å‘è¾¾åˆ°å¦ä¸€ä¸ªè·¯å£(åŒ…æ‹¬ä¸‰å²”è·¯å£)
 	 */
 	public void next_reaches(Direction direction) {
 		int tmp_x=my_car.x,tmp_y=my_car.y;
@@ -726,59 +726,59 @@ public class CarSimulation implements Runnable{
 			if(my_car.is_crossroad()&&(my_car.x!=tmp_x||my_car.y!=tmp_y)){
 				return;
 			}
-			//¸üĞÂÂ·¿ÚµÄ×´Ì¬(ºìÂÌµÆ)
+			//æ›´æ–°è·¯å£çš„çŠ¶æ€(çº¢ç»¿ç¯)
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
 					crossroads[m][n].update_state();
 				}
 			}
-			//¸üĞÂ³µ×ÓµÄ×´Ì¬(»¹Ã»ÓĞgo)
+			//æ›´æ–°è½¦å­çš„çŠ¶æ€(è¿˜æ²¡æœ‰go)
 			for(Car tmp:other_cars) {
-				if(tmp.is_crossroad()&&!tmp.inQueue) {//×¢Òâ:ÒÑ¾­Èë¶ÓµÄ³µ×Ó¾Í²»ÒªÔÙÖØ¸´Èë¶ÓÁË
-					//1.¼ÓÈëÂ·¿Ú¶ÓÁĞ
+				if(tmp.is_crossroad()&&!tmp.inQueue) {//æ³¨æ„:å·²ç»å…¥é˜Ÿçš„è½¦å­å°±ä¸è¦å†é‡å¤å…¥é˜Ÿäº†
+					//1.åŠ å…¥è·¯å£é˜Ÿåˆ—
 					if(tmp.direction==Direction.UP) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].down_queue.add(tmp);
 					if(tmp.direction==Direction.DOWN) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].up_queue.add(tmp);
 					if(tmp.direction==Direction.LEFT) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].right_queue.add(tmp);
 					if(tmp.direction==Direction.RIGHT) crossroads[tmp.x/Constant.cell_length][tmp.y/Constant.cell_length].left_queue.add(tmp);
 					tmp.inQueue=true;
 				}
-				//2.ÔÚ²íÂ·¿Ú,ĞèÒªÖØĞÂÉèÖÃ³µ×ÓµÄnext_direction,ÌØ±ğ×¢ÒâÈı²íÂ·¿Ú,Ò»¶¨Òª¸üĞÂ,·ñÔò×îºó³µ×Ó»áÊÕÁ²µ½ËÄ±ßÅÇ»²
+				//2.åœ¨å²”è·¯å£,éœ€è¦é‡æ–°è®¾ç½®è½¦å­çš„next_direction,ç‰¹åˆ«æ³¨æ„ä¸‰å²”è·¯å£,ä¸€å®šè¦æ›´æ–°,å¦åˆ™æœ€åè½¦å­ä¼šæ”¶æ•›åˆ°å››è¾¹å¾˜å¾Š
 				if(tmp.x%Constant.cell_length==0&&tmp.y%Constant.cell_length==0) {
 					if(tmp.number==Constant.cars_number+1) naive_search_direction(my_car,end_x,end_y);
 					else naive_search_direction(other_cars.get(tmp.number-1),car_dst.get(tmp.number-1).x,car_dst.get(tmp.number-1).y);
 				}
 			}
 			
-			//¸²¸Çµômy_carµÄdirection
+			//è¦†ç›–æ‰my_carçš„direction
 			my_car.direction=direction;
-			//¸üĞÂ³µ×ÓµÄ×´Ì¬(¿ªÊ¼go)
-			//1.´¦Àí²»ÔÚµÈ´ı¶ÓÁĞÀïµÄ³µ×Ó
+			//æ›´æ–°è½¦å­çš„çŠ¶æ€(å¼€å§‹go)
+			//1.å¤„ç†ä¸åœ¨ç­‰å¾…é˜Ÿåˆ—é‡Œçš„è½¦å­
 			for(Car tmp:other_cars) {
-				if(!tmp.inQueue) {//²»ÔÚµÈ´ı¶ÓÁĞÖĞ
+				if(!tmp.inQueue) {//ä¸åœ¨ç­‰å¾…é˜Ÿåˆ—ä¸­
 					tmp.car_go();
 				}
 			}
-			//2.´¦ÀíÔÚÂ·¿Ú¶ÓÁĞµÄ³µ×ÓµÄ×´Ì¬
+			//2.å¤„ç†åœ¨è·¯å£é˜Ÿåˆ—çš„è½¦å­çš„çŠ¶æ€
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
-					//1).´¦ÀíÉÏ¶ÓÁĞ,ÔÊĞíÆäµôÍ··µ»Ø
+					//1).å¤„ç†ä¸Šé˜Ÿåˆ—,å…è®¸å…¶æ‰å¤´è¿”å›
 					if(!crossroads[m][n].up_queue.isEmpty()) {
 						Car c=crossroads[m][n].up_queue.peek();
 						if(c.direction==Direction.DOWN||c.direction==Direction.UP) {
-							if(crossroads[m][n].greenlight_time>0) {//ÉÏÏÂÂÌµÆ£¬¿É×ß
+							if(crossroads[m][n].greenlight_time>0) {//ä¸Šä¸‹ç»¿ç¯ï¼Œå¯èµ°
 								c.car_go();
-								c.inQueue=false;//²»ÔÚ¶ÓÁĞÀïÃæÁË
+								c.inQueue=false;//ä¸åœ¨é˜Ÿåˆ—é‡Œé¢äº†
 								crossroads[m][n].up_queue.remove();
 							}
 						}else if(c.direction==Direction.LEFT||c.direction==Direction.RIGHT) {
-							if(crossroads[m][n].redlight_time>0) {//ÉÏÏÂºìµÆ£¬¼´×óÓÒÂÌµÆ£¬¿É×ß
+							if(crossroads[m][n].redlight_time>0) {//ä¸Šä¸‹çº¢ç¯ï¼Œå³å·¦å³ç»¿ç¯ï¼Œå¯èµ°
 								c.car_go();
 								c.inQueue=false;
 								crossroads[m][n].up_queue.remove();
 							}
 						}
 					}
-					//2).´¦ÀíÏÂ¶ÓÁĞ
+					//2).å¤„ç†ä¸‹é˜Ÿåˆ—
 					if(!crossroads[m][n].down_queue.isEmpty()) {
 						Car c=crossroads[m][n].down_queue.peek();
 						if(c.direction==Direction.DOWN||c.direction==Direction.UP) {
@@ -795,7 +795,7 @@ public class CarSimulation implements Runnable{
 							}
 						}
 					}
-					//3).´¦Àí×ó¶ÓÁĞ
+					//3).å¤„ç†å·¦é˜Ÿåˆ—
 					if(!crossroads[m][n].left_queue.isEmpty()) {
 						Car c=crossroads[m][n].left_queue.peek();
 						if(c.direction==Direction.UP||c.direction==Direction.DOWN) {
@@ -812,7 +812,7 @@ public class CarSimulation implements Runnable{
 							}
 						}
 					}
-					//4).´¦ÀíÓÒ¶ÓÁĞ
+					//4).å¤„ç†å³é˜Ÿåˆ—
 					if(!crossroads[m][n].right_queue.isEmpty()) {
 						Car c=crossroads[m][n].right_queue.peek();
 						if(c.direction==Direction.UP||c.direction==Direction.DOWN) {
@@ -837,8 +837,8 @@ public class CarSimulation implements Runnable{
 	}
 	
 	/**
-	 * ÕâÆäÊµ²ÅÊÇÄÜÓÃÔÚdfsÖĞµÄ²Ù×÷º¯Êı(ÊÂÊµÖ¤Ã÷,dfs²»ÊÊÓÃÓÚÕâÖÖ¶¯Ì¬ÎÊÌâ)
-	 * Ê¹ÓÃÊ±,Ğë±£Ö¤Ã»ÓĞÆäËû³µ×Ó,ÅäÖÃConstant.cars_number=0
+	 * è¿™å…¶å®æ‰æ˜¯èƒ½ç”¨åœ¨dfsä¸­çš„æ“ä½œå‡½æ•°(äº‹å®è¯æ˜,dfsä¸é€‚ç”¨äºè¿™ç§åŠ¨æ€é—®é¢˜)
+	 * ä½¿ç”¨æ—¶,é¡»ä¿è¯æ²¡æœ‰å…¶ä»–è½¦å­,é…ç½®Constant.cars_number=0
 	 * @param direction
 	 */
 	public void next_reaches2(Direction direction) {
@@ -847,14 +847,14 @@ public class CarSimulation implements Runnable{
 			if(my_car.is_crossroad()&&(my_car.x!=tmp_x||my_car.y!=tmp_y)){
 				return;
 			}
-			//¸üĞÂÂ·¿ÚµÄ×´Ì¬(ºìÂÌµÆ)
+			//æ›´æ–°è·¯å£çš„çŠ¶æ€(çº¢ç»¿ç¯)
 			for(int m=1;m<=Constant.N-1;++m) {
 				for(int n=1;n<=Constant.N-1;++n) {
 					crossroads[m][n].update_state();
 				}
 			}
 			
-			//¸²¸Çµômy_carµÄdirection
+			//è¦†ç›–æ‰my_carçš„direction
 			my_car.direction=direction;
 			my_car.can_go(direction);
 			
